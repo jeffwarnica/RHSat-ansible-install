@@ -1,0 +1,44 @@
+satellite_rhn_connect: "{{ lookup('env', 'SATELLITE_RHN_CONNECT') }}"
+satellite_admin_username: "{{ lookup('env', 'SATELLITE_USERNAME') }}"
+satellite_admin_password: "{{ lookup('env', 'SATELLITE_PASSWORD') }}"
+satellite_organization: "{{ lookup('env', 'SATELLITE_ORGANIZATION') }}"
+satellite_location: "{{ lookup('env', 'SATELLITE_LOCATION') }}"
+satellite_server_url: "https://{{ ansible_fqdn }}"
+satellite_fw_service_name: RH-Satellite-6
+satellite_apypie_rpm: "python2-apypie-0.2.1-2.el7.noarch.rpm"
+
+# satellite install role options:
+satellite_options: >-
+  --foreman-initial-admin-username "{{ satellite_admin_username }}"
+  --foreman-initial-admin-password "{{ satellite_admin_password }}"
+  --foreman-initial-organization  "{{ satellite_organization }}"
+  --foreman-initial-location  "{{ satellite_location }}"
+  --foreman-proxy-dns-managed false
+  --foreman-proxy-dns false
+  --foreman-proxy-dhcp false
+  --foreman-proxy-dhcp-managed false
+  --foreman-proxy-tftp false
+  --foreman-proxy-tftp-managed false
+  --foreman-proxy-puppetca true
+  --enable-foreman-plugin-discovery
+  --foreman=plugin-tasks-automatic-cleanup true
+
+satellite_settings:
+  - name: "default_download_policy"
+    value: "immediate"
+  - name: "errata_status_installable"
+    value: "true"
+  - name: "unregister_delete_host"
+    value: "true"
+  - name: "template_sync_associate"
+    value: "new"
+  - name: "template_sync_branch"
+    value: "master"
+  - name: "template_sync_repo"
+    value: "ssh://git@github.mmm.com/SCS-RHEL/templatetest.git"
+  - name: "template_sync_force"
+    value: "true"
+  - name: "template_sync_lock"
+    value: "true"
+  - name: "template_sync_prefix"
+    value: "3M-"
