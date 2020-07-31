@@ -6,7 +6,8 @@ satellite_location: "{{ lookup('env', 'SATELLITE_LOCATION') }}"
 satellite_server_url: "https://{{ ansible_fqdn }}"
 satellite_fw_service_name: RH-Satellite-6
 satellite_apypie_rpm: "python2-apypie-0.2.1-2.el7.noarch.rpm"
-satelllite_email: "{{ lookup('env', 'SATELLITE_EMAIL') }}"
+satellite_email: "{{ lookup('env', 'SATELLITE_EMAIL') }}"
+satellite_giturl: "{{ lookup('env', 'SATELLITE_GITURL') }}"
 
 # satellite install role options:
 satellite_options: >-
@@ -40,7 +41,7 @@ satellite_settings:
   - name: "template_sync_branch"
     value: "master"
   - name: "template_sync_repo"
-    value: "ssh://git@github.mmm.com/SCS-RHEL/templatetest.git"
+    value: "{{ satellite_giturl }}"
   - name: "template_sync_force"
     value: "true"
   - name: "template_sync_lock"
