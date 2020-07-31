@@ -1,4 +1,3 @@
-satellite_rhn_connect: "{{ lookup('env', 'SATELLITE_RHN_CONNECT') }}"
 satellite_admin_username: "admin"
 satellite_admin_password: "{{ lookup('env', 'SATELLITE_PASSWORD') }}"
 satellite_organization: "{{ lookup('env', 'SATELLITE_ORGANIZATION') }}"
@@ -8,6 +7,8 @@ satellite_fw_service_name: RH-Satellite-6
 satellite_apypie_rpm: "python2-apypie-0.2.1-2.el7.noarch.rpm"
 satellite_email: "dleatherman@mmm.com"
 satellite_giturl: "ssh://git@github.mmm.com/MMM/RHSat-templates.git"
+satellite_data_disk: /dev/nvme1n1
+satellite_vg_name: sat_vg01
 
 # satellite install role options:
 satellite_options: >-
@@ -62,3 +63,21 @@ satellite_settings:
     value: "true"
   - name: "remote_execution_by_default"
     value: "true"
+
+##LVM Configuration
+satellite_req_dirs:
+  - mount_point: /var/lib/pulp
+    lv_name: pulp
+    lv_size: 1400g
+  - mount_point: /var/lib/mongodb
+    lv_name: mongodb
+    lv_size: 75g
+  - mount_point: /var/lib/pgsql
+    lv_name: pgsql
+    lv_size: 35g
+  - mount_point: /var/spool/squid
+    lv_name: squid
+    lv_size: 10g
+  - mount_point: /var/lib/qpidd
+    lv_name: qpidd
+    lv_size: 15g
