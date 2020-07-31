@@ -21,5 +21,13 @@
 - meta: flush_handlers
 
 # Perfomance tune the satellite installation
+  - name: Move performance tuning yaml to /etc/foreman-installer/custom-hiera.yaml
+    copy:
+      src: files/custom-hiera.yaml
+      dest: /etc/foreman-installer/custom-hiera.yaml
+      owner: root
+      group: root
+
   - name: Activation of the performance tuning
-    shell: satellite-installer --tuning "{{ satellite_tuning }}"
+    shell: satellite-installer
+    
