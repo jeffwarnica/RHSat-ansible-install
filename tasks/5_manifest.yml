@@ -2,15 +2,15 @@
 - name: Pull down manifest
   get_url:
     url: https://subscription.rhsm.redhat.com/subscription/consumers/{{ manifest_uuid }}/export
-    username: "{{ satellite_admin_user }}"
+    username: "{{ satellite_admin_username }}"
     password: "{{ satellite_admin_password }}"
     dest: /opt/satellite_manifest.zip
     validate_certs: no
     
 - name: "Upload the manifest"
   theforeman.foreman.katello_manifest:
-    username: "{{ lookup('env','FOREMAN_USER') }}"
-    password: "{{ lookup('env','FOREMAN_PASSWORD') }}"
+    username: "{{ satellite_admin_username }}"
+    password: "{{ satellite_admin_password }}"
     server_url: "https://{{ ansible_fqdn }}"
     organization: "{{ foreman_initial_organization }}"
     state: present
