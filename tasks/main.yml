@@ -1,4 +1,7 @@
 # task file for install
+- name: main | configure LV
+  import_tasks: 1_storage_config.yml
+
 - name: main | install theforeman prereq
   import_tasks: 2_theforeman.yml
 
