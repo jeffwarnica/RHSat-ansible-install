@@ -3,7 +3,7 @@ satellite_admin_password: "{{ lookup('env', 'SATELLITE_PASSWORD') }}"
 satellite_organization: "{{ lookup('env', 'SATELLITE_ORGANIZATION') }}"
 satellite_location: "{{ lookup('env', 'SATELLITE_LOCATION') }}"
 satellite_server_url: "https://{{ ansible_fqdn }}"
-satellite_apypie_rpm: "python2-apypie-0.2.1-2.el7.noarch.rpm"
+satellite_rhn_activation_key: "{{ lookup('env', 'RHN_ACTIVATIONKEY') }}"
 satellite_email: "dleatherman@mmm.com"
 satellite_giturl: "ssh://git@github.mmm.com/MMM/RHSat-templates.git"
 satellite_data_disk: /dev/nvme1n1
