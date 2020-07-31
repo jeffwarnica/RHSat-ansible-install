@@ -12,6 +12,6 @@
     username: "{{ satellite_admin_username }}"
     password: "{{ satellite_admin_password }}"
     server_url: "https://{{ ansible_fqdn }}"
-    organization: "{{ foreman_initial_organization }}"
+    organization: "{{ satellite_organization }}"
     state: present
     manifest_path: "/opt/satellite_manifest.zip" 
