@@ -1,12 +1,15 @@
 # task file for install
 - name: main | configure LV
   import_tasks: 1_storage_config.yml
+  
+- name: main | Register to RHN
+  import_tasks: 2_rhsm_subscribe.yml
 
 - name: main | install theforeman prereq
-  import_tasks: 2_theforeman.yml
+  import_tasks: 3_theforeman.yml
 
 - name: main | install satellite
-  import_tasks: 3_install.yml
+  import_tasks: 4_install.yml
 
 - name: main | set satellite settings
-  import_tasks: 4_settings.yml
+  import_tasks: 5_settings.yml
