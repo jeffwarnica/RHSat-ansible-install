@@ -9,6 +9,7 @@ satellite_email: "dleatherman@mmm.com"
 satellite_giturl: "ssh://git@github.mmm.com/MMM/RHSat-templates.git"
 satellite_data_disk: /dev/nvme1n1
 satellite_vg_name: sat_vg01
+satellite_tuning: extra-extra-large.yaml
 
 # satellite install role options:
 satellite_options: >-
