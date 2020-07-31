@@ -3,11 +3,12 @@ satellite_admin_password: "{{ lookup('env', 'SATELLITE_PASSWORD') }}"
 satellite_organization: "{{ lookup('env', 'SATELLITE_ORGANIZATION') }}"
 satellite_location: "{{ lookup('env', 'SATELLITE_LOCATION') }}"
 satellite_server_url: "https://{{ ansible_fqdn }}"
-satellite_rhn_activation_key: "{{ lookup('env', 'RHN_ACTIVATIONKEY') }}"
+satellite_rhn_activation_key: 3M-SatelliteAK
 satellite_email: "dleatherman@mmm.com"
 satellite_giturl: "ssh://git@github.mmm.com/MMM/RHSat-templates.git"
 satellite_data_disk: /dev/nvme1n1
 satellite_vg_name: sat_vg01
+satellite_rhn_org: 5393025
 satellite_rhn_username: "{{ lookup('env', 'RHN_USERNAME') }}"
 satellite_rhn_password: "{{ lookup('env', 'RHN_PASSWORD') }}"
 satellite_manifest_uuid: "{{ lookup('env', 'MANIFEST_UUID') }}"
