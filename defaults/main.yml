@@ -1,7 +1,7 @@
 satellite_admin_username: "admin"
 satellite_admin_password: "{{ lookup('env', 'SATELLITE_PASSWORD') }}"
-satellite_organization: "{{ lookup('env', 'SATELLITE_ORGANIZATION') }}"
-satellite_location: "{{ lookup('env', 'SATELLITE_LOCATION') }}"
+satellite_organization: "3M OnPrem"
+satellite_location: "AWS"
 satellite_server_url: "https://{{ ansible_fqdn }}"
 satellite_rhn_activation_key: 3M-SatelliteAK
 satellite_email: "dleatherman@mmm.com"
@@ -50,8 +50,6 @@ satellite_settings:
     value: "true"
   - name: "template_sync_lock"
     value: "true"
-  - name: "template_sync_prefix"
-    value: "3M-"
   - name: "administrator"
     value: "{{ satellite_email }}"
   - name: "append_domain_name_for_hosts"
