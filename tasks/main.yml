@@ -16,3 +16,6 @@
 
 - name: main | set satellite settings
   import_tasks: 6_settings.yml
+
+- name: main | uploading manifests
+  import_tasks: 7_manifest.yml
