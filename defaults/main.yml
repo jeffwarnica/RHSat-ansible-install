@@ -29,7 +29,7 @@ satellite_options: >-
   --certs-server-cert '/tmp/backup/satellite-certificates/{{ inventory_hostname }}/{{ inventory_hostname }}_cert.pem' 
   --certs-server-key '/tmp/backup/satellite-certificates/{{ inventory_hostname }}/{{ inventory_hostname }}_cert_key.pem' 
   --certs-server-ca-cert '/tmp/backup/satellite-certificates/{{ inventory_hostname }}/{{ inventory_hostname }}_cert_bundle.pem' 
-  --foreman-plugin-tasks-automatic-cleanup true"
+  --foreman-plugin-tasks-automatic-cleanup true
 
 #Basic Settings
 satellite_settings:
