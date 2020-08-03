@@ -1,8 +1,8 @@
 # task file for install
-- name: main | configure LV
-  import_tasks: 1_storage_config.yml
-  
 - name: main | Register to RHN
+  import_tasks: 1_rhsm_subscribe.yml
+  
+- name: main | Configure LV
   import_tasks: 2_rhsm_subscribe.yml
 
 - name: main | install theforeman prereq
