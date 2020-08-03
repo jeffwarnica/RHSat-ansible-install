@@ -3,7 +3,7 @@
   import_tasks: 1_rhsm_subscribe.yml
   
 - name: main | Configure LV
-  import_tasks: 2_rhsm_subscribe.yml
+  import_tasks: 2_storage_config.yml
 
 - name: main | install theforeman prereq
   import_tasks: 3_theforeman.yml
