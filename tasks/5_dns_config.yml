@@ -7,7 +7,3 @@
     regexp: "{{ ansible_fqdn }}"
     line: "{{ ansible_default_ipv4.address }} {{ ansible_fqdn }} {{ ansible_hostname }}"
     state: present
-
-- name: Set the hostname of the machine
-  hostname:
-    name: "{{ ansible_fqdn }}"
