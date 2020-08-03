@@ -8,7 +8,7 @@
     validate_certs: no
     
 - name: "Upload the manifest"
-  theforeman.foreman.katello_manifest:
+  theforeman.foreman.subscription_manifest:
     username: "{{ satellite_admin_username }}"
     password: "{{ satellite_admin_password }}"
     server_url: "https://{{ ansible_fqdn }}"
