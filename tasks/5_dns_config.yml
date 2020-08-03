@@ -1,25 +1,14 @@
 ---
 # TASKS
 
-- name: Get the current hostname of the machine
-  command: hostname -s
-  register: current_hostname
-  changed_when: false
-  when: dns_config_hostname == "USE_CURRENT_HOSTNAME"
-
-- name: Since dns_config_hostname was found to be empty, set it to the current hostname
-  set_fact:
-    dns_config_hostname: "{{ current_hostname.stdout }}"
-  when: dns_config_hostname == "USE_CURRENT_HOSTNAME"
   
 - name: Ensure that there's a line for the short host name and full hostname
   lineinfile:
     path: /etc/hosts
     regexp: "{{ ansible_fqdn }}"
-    line: "{{ ansible_default_ipv4.address }} {{ dns_config_hostname }}.{{ dns_config_domain }} {{ dns_config_hostname }}"
+    line: "{{ ansible_default_ipv4.address }} {{ ansible_fqdn }} {{ ansible_hostname }}"
     state: present
-  when: dns_config_localhost_in_etc_hosts
 
 - name: Set the hostname of the machine
   hostname:
-    name: "{{ dns_config_hostname }}.{{ dns_config_domain }}"
+    name: "{{ ansible_fqdn }}"
