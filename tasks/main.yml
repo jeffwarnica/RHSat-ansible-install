@@ -2,14 +2,17 @@
 - name: main | Register to RHN
   import_tasks: 1_rhsm_subscribe.yml
   
+- name: main | Patching system
+  import_tasks: 2_patch.yml
+  
 - name: main | Configure LV
-  import_tasks: 2_storage_config.yml
+  import_tasks: 3_storage_config.yml
 
 - name: main | install theforeman prereq
-  import_tasks: 3_theforeman.yml
+  import_tasks: 4_theforeman.yml
 
 - name: main | install satellite
-  import_tasks: 4_install.yml
+  import_tasks: 5_install.yml
 
 - name: main | set satellite settings
-  import_tasks: 5_settings.yml
+  import_tasks: 6_settings.yml
