@@ -2,8 +2,8 @@
 - name: Pull down manifest
   get_url:
     url: https://subscription.rhsm.redhat.com/subscription/consumers/{{ manifest_uuid }}/export
-    username: "{{ satellite_admin_username }}"
-    password: "{{ satellite_admin_password }}"
+    username: "{{ satellite_rhn_username }}"
+    password: "{{ satellite_rhn_password }}"
     dest: /opt/satellite_manifest.zip
     validate_certs: no
     
