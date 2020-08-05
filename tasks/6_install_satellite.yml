@@ -1,13 +1,3 @@
-- name: install | get package facts
-  package_facts:
-    manager: auto
-
-- name: install | install satellite package
-  package:
-    name: "{{ satellite_packages }}"
-    state: present
-  when: "'satellite' not in ansible_facts.packages"
-
 # copy template file with sceniario options and only run installer if changed
 - name: install | copy installer script
   template:
