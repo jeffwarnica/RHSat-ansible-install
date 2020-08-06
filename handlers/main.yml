@@ -2,7 +2,6 @@
   command: >-
     satellite-installer --scenario satellite
     --foreman-initial-admin-username "{{ satellite_admin_username }}"
-    --foreman-initial-admin-password "{{ satellite_admin_password }}"
     {{ satellite_options }}
   register: installer_output
 
