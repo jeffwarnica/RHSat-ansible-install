@@ -13,6 +13,7 @@ satellite_rhn_username: "{{ lookup('env', 'RHN_USERNAME') }}"
 satellite_rhn_password: "{{ lookup('env', 'RHN_PASSWORD') }}"
 satellite_manifest_uuid: "{{ lookup('env', 'MANIFEST_UUID') }}"
 satellite_deployment_version: "6.7"
+satellite_server_basearch: "x86_64"
 
 # satellite install role options:
 satellite_options: >-
@@ -87,3 +88,30 @@ satellite_req_dirs:
   - mount_point: /var/lib/qpidd
     lv_name: qpidd
     lv_size: 15g
+
+
+satellite_rhel7_product:
+
+  - name: "Red Hat Enterprise Linux 7 Server (RPMs)"
+    label: rhel-7-server-rpms
+    repos:
+      - releasever: "7Server"
+        basearch: "{{ satellite_server_basearch }}"
+
+  - name: "Red Hat Satellite Capsule 6.7 (for RHEL 7 Server) (RPMs)"
+    label: rhel-7-server-satellite-capsule-6.7-rpms
+    all: "true"
+
+  - name: "Red Hat Software Collections RPMs for Red Hat Enterprise Linux 7 Server"
+    label: rhel-server-rhscl-7-rpms
+    repos:
+      - releasever: "7Server"
+        basearch: "{{ satellite_server_basearch }}"
+
+  - name: "Red Hat Satellite Maintenance 6 (for RHEL 7 Server) (RPMs)"
+    label: rhel-7-server-satellite-maintenance-6-rpms
+    all: "true"
+
+  - name: "Red Hat Ansible Engine 2.8 RPMs for Red Hat Enterprise Linux 7 Server"
+    label: rhel-7-server-ansible-2.8-rpms
+    all: "true" 

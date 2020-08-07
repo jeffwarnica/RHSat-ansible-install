@@ -29,3 +29,9 @@
 
 - name: main | uploading manifests
   import_tasks: 10_manifest.yml
+
+- name: main | enable requred capsule repos
+  import_tasks: 11_enablerepos.yml
+
+- name: main | Sync repos
+  import_tasks: 12_repo_sync.yml
