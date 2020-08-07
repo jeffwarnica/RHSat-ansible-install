@@ -29,3 +29,18 @@
 
 - name: main | uploading manifests
   import_tasks: 10_manifest.yml
+
+- name: main | enable requred capsule repos
+  import_tasks: 11_enablerepos.yml
+
+- name: main | Sync repos
+  import_tasks: 12_repo_sync.yml
+
+- name: main | create capsule content view
+  import_tasks: 13_content_views.yml
+
+- name: main | Create host collections
+  import_tasks: 14_host_collections.yml
+
+- name: main | Create Capsule activation key
+  import_tasks: 15_activation_keys.yml

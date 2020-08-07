@@ -13,6 +13,7 @@ satellite_rhn_username: "{{ lookup('env', 'RHN_USERNAME') }}"
 satellite_rhn_password: "{{ lookup('env', 'RHN_PASSWORD') }}"
 satellite_manifest_uuid: "{{ lookup('env', 'MANIFEST_UUID') }}"
 satellite_deployment_version: "6.7"
+satellite_server_basearch: "x86_64"
 
 # satellite install role options:
 satellite_options: >-
@@ -87,3 +88,63 @@ satellite_req_dirs:
   - mount_point: /var/lib/qpidd
     lv_name: qpidd
     lv_size: 15g
+
+
+satellite_rhel7_product:
+
+  - name: "Red Hat Enterprise Linux 7 Server (RPMs)"
+    label: rhel-7-server-rpms
+    repos:
+      - releasever: "7Server"
+        basearch: "{{ satellite_server_basearch }}"
+
+  - name: "Red Hat Satellite Capsule 6.7 (for RHEL 7 Server) (RPMs)"
+    label: rhel-7-server-satellite-capsule-6.7-rpms
+    all: "true"
+
+  - name: "Red Hat Software Collections RPMs for Red Hat Enterprise Linux 7 Server"
+    label: rhel-server-rhscl-7-rpms
+    repos:
+      - releasever: "7Server"
+        basearch: "{{ satellite_server_basearch }}"
+
+  - name: "Red Hat Satellite Maintenance 6 (for RHEL 7 Server) (RPMs)"
+    label: rhel-7-server-satellite-maintenance-6-rpms
+    all: "true"
+
+  - name: "Red Hat Ansible Engine 2.8 RPMs for Red Hat Enterprise Linux 7 Server"
+    label: rhel-7-server-ansible-2.8-rpms
+    all: "true" 
+
+
+satellite_content_views:
+  - name: capsule-cv
+
+satellite_host_collections:
+  - name: capsule_hc
+    description: "physical KVM servers"
+
+satellite_activation_keys:
+  - name: capsule-ak
+    lifecycle_environment: "Library"
+    content_view: capsule-cv
+    host_collections:
+      - capsule_hc
+    subscriptions:
+      - name: "Red Hat Satellite Infrastructure Subscription"
+    content_overrides:
+      - label: rhel-7-server-ansible-2.8-rpms
+        override: enabled
+      - label: rhel-7-server-satellite-maintenance-6-rpms
+        override: enabled
+      - label: rhel-server-rhscl-7-rpms
+        override: enabled
+      - label: rhel-7-server-satellite-tools-{{ satellite_deployment_version }}-rpms
+        override: enabled
+      - label: rhel-7-server-satellite-capsule-{{ satellite_deployment_version }}-rpms
+        override: enabled
+      - label: rhel-7-server-rpms
+        override: enabled
+    auto_attach: true
+    release_version: 7Server
+    service_level: "Premium"
