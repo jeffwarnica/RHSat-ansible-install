@@ -115,3 +115,16 @@ satellite_rhel7_product:
   - name: "Red Hat Ansible Engine 2.8 RPMs for Red Hat Enterprise Linux 7 Server"
     label: rhel-7-server-ansible-2.8-rpms
     all: "true" 
+
+
+satellite_content_views:
+  - name: capsule-cv
+    repositories:
+      - name: "Red Hat Ansible Engine 2.8 RPMs for Red Hat Enterprise Linux 7 Server"
+        product: "Red Hat Ansible Engine"
+
+  - name: capsule-cv
+    repositories:
+      - name: "Red Hat Software Collections RPMs for Red Hat Enterprise Linux 7 Server"
+        product: "Red Hat Software Collections (for RHEL Server)"
+

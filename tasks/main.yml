@@ -35,3 +35,6 @@
 
 - name: main | Sync repos
   import_tasks: 12_repo_sync.yml
+
+- name: main | create capsule content view
+  import_tasks: 13_content_views.yml
