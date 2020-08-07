@@ -119,12 +119,32 @@ satellite_rhel7_product:
 
 satellite_content_views:
   - name: capsule-cv
-    repositories:
-      - name: "Red Hat Ansible Engine 2.8 RPMs for Red Hat Enterprise Linux 7 Server"
-        product: "Red Hat Ansible Engine"
 
-  - name: capsule-cv
-    repositories:
-      - name: "Red Hat Software Collections RPMs for Red Hat Enterprise Linux 7 Server"
-        product: "Red Hat Software Collections (for RHEL Server)"
+satellite_host_collections:
+  - name: capsule_hc
+    description: "physical KVM servers"
 
+satellite_activation_keys:
+  - name: capsule-ak
+    lifecycle_environment: "Library"
+    content_view: capsule-cv
+    host_collections:
+      - capsule_hc
+    subscriptions:
+      - name: "Red Hat Satellite Infrastructure Subscription"
+    content_overrides:
+      - label: rhel-7-server-ansible-2.8-rpms
+        override: enabled
+      - label: rhel-7-server-satellite-maintenance-6-rpms
+        override: enabled
+      - label: rhel-server-rhscl-7-rpms
+        override: enabled
+      - label: rhel-7-server-satellite-tools-{{ satellite_deployment_version }}-rpms
+        override: enabled
+      - label: rhel-7-server-satellite-capsule-{{ satellite_deployment_version }}-rpms
+        override: enabled
+      - label: rhel-7-server-rpms
+        override: enabled
+    auto_attach: true
+    release_version: 7Server
+    service_level: "Premium"
