@@ -19,6 +19,16 @@
   when: item.path != "/etc/yum.repos.d/redhat.repo"
   with_items: "{{ repo_files.files }}"
 
+  - name: RHSM Subscribe | remove old subscription
+    redhat_subscription:
+      state: absent
+
+  - name: RHSM Subscribe | remove old rpms from Satellite 6
+    yum:
+      name:
+        - katello-ca-consumer-*.noarch
+      state: absent
+
 - name: RHSM Subscribe | Using an Activation Key for register to Red Hat CDN
   redhat_subscription:
     state: present
