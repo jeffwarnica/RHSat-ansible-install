@@ -5,6 +5,19 @@
     group: apache
     mode: '0755'
 
+- name: Enable repos | RHEL Products
+  theforeman.foreman.product:
+    username: "{{ satellite_admin_username }}"
+    password: "{{ satellite_admin_password }}"
+    server_url: "{{ satellite_server_url }}"
+    organization: "{{ satellite_organization }}"
+    name: "{{ item }}"
+    state: present
+  with_items: "{{ satellite_all_cvs | json_query(_query) }}"
+  vars:
+    _query: '[*].repos[*].reposetname'
+
+
 - name: enable repos | RHEL repositories
   theforeman.foreman.repository_set:
     username: "{{ satellite_admin_username }}"
@@ -12,8 +25,9 @@
     server_url: "{{ satellite_server_url }}"
     organization: "{{ satellite_organization }}"
     label: "{{ item.label }}"
-    repositories: "{{ item.repos | default(omit) }}"
+    repositories: "{{ item.repos if item.all is undefined else null | default(omit) }}" # Some bug here. We want to record repos for CVs, but for 8.x can only import "all" for unknown reasons
     all_repositories: "{{ item.all | default(omit) }}"
     state: enabled
-  with_items:
-    - "{{ satellite_rhel7_product }}"
+  with_items: "{{ satellite_all_cvs | json_query(_query) }}"
+  vars:
+    _query: '[*].repos[*]'

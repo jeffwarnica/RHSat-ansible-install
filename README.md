@@ -41,7 +41,7 @@ License
 
 Author Information
 ------------------
-Ron Sawyer <rsawyer@redhat.com>
-Cory McKee <cmckee@redhat.com>
-Greg Hellings <ghelling@redhat.com>
-Jeff Warnica <jwarnica@redhat.com>
+Ron Sawyer <rsawyer@redhat.com>    
+Cory McKee <cmckee@redhat.com>    
+Greg Hellings <ghelling@redhat.com>    
+Jeff Warnica <jwarnica@redhat.com>    

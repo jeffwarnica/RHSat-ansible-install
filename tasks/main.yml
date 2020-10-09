@@ -1,46 +1,153 @@
+- name: testing
+  include_tasks:
+    file: 00_test.yml
+    apply:
+      tags: testing
+  tags:
+    - testing
+    - never
+    
 # task file for install
-
 - name: main | Register to RHN
-  import_tasks: 1_rhsm_subscribe.yml
-  
-- name: main | Patching system
-  import_tasks: 2_patch.yml
-  
+  include_tasks:
+    file: 1_rhsm_subscribe.yml
+    apply:
+      tags: serverprep
+  tags:
+    - serverprep
+    
+- name: main | Configure system
+  include_tasks:
+    file: 2_sysconfig.yml
+    apply:
+      tags: serverprep
+  tags:
+    - serverprep
+
 - name: main | Configure LV
-  import_tasks: 3_storage_config.yml
+  include_tasks:
+    file: 3_storage_config.yml
+    apply:
+      tags: serverprep
+  tags:
+    - serverprep
 
 - name: main | Installing Satellite Packages
-  import_tasks: 4_install_packages.yml 
+  include_tasks:
+    file: 4_install_packages.yml 
+    apply:
+      tags: satinstall
+  tags:
+    - satinstall
 
 - name: main | install theforeman prereq
-  import_tasks: 5_theforeman.yml
+  include_tasks:
+    file: 5_theforeman.yml
+    apply:
+      tags: satinstall
+  tags:
+    - satinstall
 
-- name: main | Create CSR
-  import_tasks: 6_prep-custom-certs.yml
+- name: main | Create Certs and CSR
+  include_tasks:
+    file: 6.1_prep-custom-certs.yml
+    apply:
+      tags: satcerts
+  tags:
+    - satcerts
+  when: satellite_certs_generate
+
+- name: main | Configure provided Certs
+  include_tasks:
+    file: 6.2_install-provided-certs.yml
+    apply:
+      tags: satcerts
+  tags:
+    - satcerts
+  when: not satellite_certs_generate
+
+- name: main | Test Certs
+  include_tasks:
+    file: 6.10_test-certs.yml
+    apply:
+      tags: satcerts
+  tags:
+    - satcerts
 
 - name: main | fix hosts file
-  import_tasks: 7_dns_config.yml
+  include_tasks:
+    file: 7_dns_config.yml
+    apply:
+      tags: serverprep
+  tags:
+    - serverprep
 
 - name: main | install satellite
-  import_tasks: 8_install.yml
+  include_tasks:
+    file: 8_install.yml
+    apply:
+      tags: satinstall
+  tags:
+    - satinstall
 
 - name: main | set satellite settings
-  import_tasks: 9_settings.yml
+  include_tasks:
+    file: 9_settings.yml
+    apply:
+      tags: satconfigure
+  tags:
+    - satconfigure
 
 - name: main | uploading manifests
-  import_tasks: 10_manifest.yml
+  include_tasks:
+    file: 10_manifest.yml
+    apply:
+      tags: 
+        - satcontent
+        - satcontentsync
+  tags:
+    - satcontent
+    - satcontentsync
 
-- name: main | enable requred capsule repos
-  import_tasks: 11_enablerepos.yml
+- name: main | enable required repositories
+  include_tasks:
+    file: 11_enablerepos.yml
+    apply:
+      tags: satcontent
+  tags:
+    - satcontent
 
-- name: main | Sync repos
-  import_tasks: 12_repo_sync.yml
+- name: main | Sync repositories
+  include_tasks:
+    file: 12_repo_sync.yml
+    apply:
+      tags: 
+        - satcontent
+        - satcontentsync
+  tags:
+    - satcontent
+    - satcontentsync
 
-- name: main | create capsule content view
-  import_tasks: 13_content_views.yml
+- name: main | create Content Views
+  include_tasks:
+    file: 13_content_views.yml
+    apply:
+      tags: satcontent
+  tags:
+    - satcontent
 
 - name: main | Create host collections
-  import_tasks: 14_host_collections.yml
+  include_tasks:
+    file: 14_host_collections.yml
+    apply:
+      tags: satcontent
+  tags:
+    - satcontent
 
-- name: main | Create Capsule activation key
-  import_tasks: 15_activation_keys.yml
+- name: main | Create Activation Key
+  include_tasks:
+    file: 15_activation_keys.yml
+    apply:
+      tags: satcontent
+  tags:
+    - satcontent

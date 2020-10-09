@@ -1,4 +1,4 @@
-# Tuning suitable for 3M Satellite
+# Tuning suitable for Satellite
 #
 # Instructions for use:
 # 1) Copy this file to /etc/foreman-installer/custom-hiera.yaml

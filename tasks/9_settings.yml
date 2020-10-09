@@ -1,3 +1,4 @@
+
 - name: satellite settings | common settings
   theforeman.foreman.setting:
     username: "{{ satellite_admin_username }}"

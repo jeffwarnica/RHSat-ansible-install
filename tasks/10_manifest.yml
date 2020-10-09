@@ -1,15 +1,12 @@
 ---
 - name: Pull down manifest
   get_url:
-<<<<<<< HEAD:tasks/10_manifest.yml
     url: https://subscription.rhsm.redhat.com/subscription/consumers/{{ satellite_manifest_uuid }}/export
-=======
-    url: https://subscription.rhsm.redhat.com/subscription/consumers/{{ manifest_uuid }}/export
->>>>>>> master:tasks/8_manifest.yml
     username: "{{ satellite_rhn_username }}"
     password: "{{ satellite_rhn_password }}"
     dest: /opt/satellite_manifest.zip
     validate_certs: no
+    timeout: 600 
     
 - name: "Upload the manifest"
   theforeman.foreman.subscription_manifest:

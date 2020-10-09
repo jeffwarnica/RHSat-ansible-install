@@ -7,7 +7,7 @@
   register: repositories
 
 - name: repo sync | Kick off repository sync tasks
-  theforeman.foreman..repository_sync:
+  theforeman.foreman.repository_sync:
     username: "{{ satellite_admin_username }}"
     password: "{{ satellite_admin_password }}"
     server_url: "{{ satellite_server_url }}"

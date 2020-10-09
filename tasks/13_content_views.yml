@@ -5,23 +5,14 @@
     server_url: "{{ satellite_server_url }}"
     name: "{{ item.name }}"
     organization: "{{ satellite_organization }}"
-    repositories:
-      - name: "Red Hat Ansible Engine 2.8 RPMs for Red Hat Enterprise Linux 7 Server x86_64"
-        product: "Red Hat Ansible Engine"
-      - name: "Red Hat Software Collections RPMs for Red Hat Enterprise Linux 7 Server x86_64 7Server"
-        product: "Red Hat Software Collections (for RHEL Server)"
-      - name: "Red Hat Satellite Capsule 6.7 for RHEL 7 Server RPMs x86_64"
-        product: "Red Hat Satellite Capsule"
-      - name: "Red Hat Enterprise Linux 7 Server RPMs x86_64 7Server"
-        product: "Red Hat Enterprise Linux Server"
-      - name: "Red Hat Satellite Maintenance 6 for RHEL 7 Server RPMs x86_64"
-        product: "Red Hat Enterprise Linux Server"
-      - name: "Red Hat Satellite Tools 6.7 for RHEL 7 Server RPMs x86_64"
-        product: "Red Hat Enterprise Linux Server"
-  with_items: "{{ satellite_content_views }}"
+    repositories: "{{ item.repos | json_query(_query) }}"
+  with_items: "{{ satellite_all_cvs }}"
+  vars:
+    _query: '[*].{name: reponame, product: product}'
   notify: handler - publish content views
 
-- meta: flush_handlers
+- name: Flush handlers
+  meta: flush_handlers
 
 - name: "config content views | Create a composite content view"
   theforeman.foreman.content_view:
@@ -33,8 +24,9 @@
     composite: true
     auto_publish: true
     components: "{{ item.components }}"
-  with_items: "{{ satellite_composite_content_views }}"
+  with_items: "{{ satellite_all_ccvs }}"
   notify: handler - publish composite content views
-  when: satellite_composite_content_views is defined
+  when: satellite_all_ccvs is defined
 
-- meta: flush_handlers
+- name: Flush handlers
+  meta: flush_handlers

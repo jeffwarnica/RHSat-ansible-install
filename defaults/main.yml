@@ -1,19 +1,50 @@
 satellite_admin_username: "admin"
 satellite_admin_password: "{{ lookup('env', 'SATELLITE_PASSWORD') }}"
-satellite_organization: "3M OnPrem"
+satellite_organization: "Example OnPrem"
 satellite_location: "AWS"
 satellite_server_url: "https://{{ ansible_fqdn }}"
-satellite_rhn_activation_key: 3M-SatelliteAK
-satellite_email: "dleatherman@mmm.com"
-satellite_giturl: "ssh://git@github.mmm.com/MMM/RHSat-templates.git"
+satellite_rhn_activation_key: ""
+satellite_email: "dleatherman@EXAMPLE.com"
+
+# Storage location of GIT managed templates
+satellite_giturl: "ssh://git@github.EXAMPLE.com/EXAMPLE/RHSat-templates.git"
 satellite_data_disk: /dev/nvme1n1
 satellite_vg_name: sat_vg01
-satellite_rhn_org: "5393025"
+satellite_rhn_org: "5318211"
 satellite_rhn_username: "{{ lookup('env', 'RHN_USERNAME') }}"
 satellite_rhn_password: "{{ lookup('env', 'RHN_PASSWORD') }}"
 satellite_manifest_uuid: "{{ lookup('env', 'MANIFEST_UUID') }}"
 satellite_deployment_version: "6.7"
 satellite_server_basearch: "x86_64"
+
+#If true, we generate a key, and a certificate signing request to be dealt with
+# in real time.
+satellite_certs_generate: true
+
+# If false, provide (localhost) paths to the needed SSL stuff: 
+# satellite_certs_provided_cert:
+# satellite_certs_provided_key:
+# satellite_certs_provided_ca_bundle:
+
+#Firewall services and ports
+satellite_firewall_services:
+  - http    # Anaconda, yum, for obtaining Katello certificates, templates, and for downloading iPXE firmware
+  - https   # Subscription Management Services, yum, Telemetry Services, and for connection to the Katello Agent
+
+satellite_firewall_ports:
+  - 5646/tcp # The Capsule Qpid dispatch router to the Qpid dispatch router in Satellite
+  - 5647/tcp # Katello Agent to communicate with Satellite’s Qpid dispatch router
+  # - 8000/tcp # Anaconda to download kickstart templates to hosts, and for downloading iPXE firmware
+  - 8140/tcp # Puppet agent to Puppet master connections
+  - 9090/tcp # Sending SCAP reports to the integrated Capsule, for the discovery image during provisioning, and for communicating with Satellite Server to copy the SSH keys for Remote Execution (Rex) configuration
+  # - 7/tcp    # External DHCP on a Client to Satellite network, ICMP ECHO to verify IP address is free (Optional)
+  # - 7/udp    # External DHCP on a Client to Satellite network, ICMP ECHO to verify IP address is free (Optional)
+  # - 53/tcp   # Client DNS queries to a Satellite’s integrated Capsule DNS service (Optional)
+  # - 53/udp   # Client DNS queries to a Satellite’s integrated Capsule DNS service (Optional)
+  # - 67/udp   # Client to Satellite’s integrated Capsule broadcasts, DHCP broadcasts for Client provisioning from a Satellite’s integrated Capsule (Optional)
+  # - 69/udp   # Clients downloading PXE boot image files from a Satellites' integrated Capsule for provisioning (Optional)
+  # - 5000/tcp # Connection to Katello for the Docker registry (Optional)
+
 
 # satellite install role options:
 satellite_options: >-
@@ -90,44 +121,88 @@ satellite_req_dirs:
     lv_size: 15g
 
 
-satellite_rhel7_product:
+# Here we configure two Content Views - RHEL7, and capsule addons.
+#
+# See below to enable them.
+#
+# Additional CVs can be configured outside this role, and enabled, 
+# with suitable structure being provided, and the enabling variables updated
+#
+# The data structure here is from the perspective of the Content View, and its 
+# upstream dependencies.
 
-  - name: "Red Hat Enterprise Linux 7 Server (RPMs)"
-    label: rhel-7-server-rpms
+satellite_rhel7_base_cv:
+  - name: RHEL7 Base CV
     repos:
-      - releasever: "7Server"
-        basearch: "{{ satellite_server_basearch }}"
+      - reposetname: "Red Hat Enterprise Linux 7 Server (RPMs)"
+        reponame: "Red Hat Enterprise Linux 7 Server RPMs x86_64 7Server"
+        label: rhel-7-server-rpms
+        product: "Red Hat Enterprise Linux Server"
+        repos:
+          - releasever: "7Server"
+            basearch: "{{ satellite_server_basearch }}"
 
-  - name: "Red Hat Satellite Capsule 6.7 (for RHEL 7 Server) (RPMs)"
-    label: rhel-7-server-satellite-capsule-6.7-rpms
-    all: "true"
+      - reposetname: "Red Hat Software Collections RPMs for Red Hat Enterprise Linux 7 Server"
+        reponame: "Red Hat Software Collections RPMs for Red Hat Enterprise Linux 7 Server x86_64 7Server"
+        label: rhel-server-rhscl-7-rpms
+        product: "Red Hat Software Collections (for RHEL Server)"
+        repos:
+          - releasever: "7Server"
+            basearch: "{{ satellite_server_basearch }}"
 
-  - name: "Red Hat Software Collections RPMs for Red Hat Enterprise Linux 7 Server"
-    label: rhel-server-rhscl-7-rpms
+      - reposetname: "Red Hat Ansible Engine 2.8 RPMs for Red Hat Enterprise Linux 7 Server"
+        reponame: "Red Hat Ansible Engine 2.8 RPMs for Red Hat Enterprise Linux 7 Server x86_64"
+        product: "Red Hat Ansible Engine"
+        label: rhel-7-server-ansible-2.8-rpms
+        all: True 
+
+satellite_rhel7_capsule_cv:
+  - name: RHEL7 Capsule CV
     repos:
-      - releasever: "7Server"
-        basearch: "{{ satellite_server_basearch }}"
+      - reposetname: "Red Hat Satellite Capsule 6.7 (for RHEL 7 Server) (RPMs)"
+        reponame: "Red Hat Satellite Capsule 6.7 for RHEL 7 Server RPMs x86_64"
+        label: rhel-7-server-satellite-capsule-6.7-rpms
+        product: "Red Hat Satellite Capsule"
+        all: True
 
-  - name: "Red Hat Satellite Maintenance 6 (for RHEL 7 Server) (RPMs)"
-    label: rhel-7-server-satellite-maintenance-6-rpms
-    all: "true"
+      - reposetname: "Red Hat Satellite Maintenance 6 (for RHEL 7 Server) (RPMs)"
+        reponame: "Red Hat Satellite Maintenance 6 for RHEL 7 Server RPMs x86_64"
+        label: rhel-7-server-satellite-maintenance-6-rpms
+        product: "Red Hat Enterprise Linux Server"
+        all: True
 
-  - name: "Red Hat Ansible Engine 2.8 RPMs for Red Hat Enterprise Linux 7 Server"
-    label: rhel-7-server-ansible-2.8-rpms
-    all: "true" 
+      - reposetname: "Red Hat Satellite Tools 6.7 for RHEL 7 Server RPMs x86_64"
+        reponame: "Red Hat Satellite Tools 6.7 for RHEL 7 Server RPMs x86_64"
+        label: rhel-7-server-satellite-tools-6.7-rpms
+        product: "Red Hat Enterprise Linux Server"
+        all: True
 
+#Enable the content views. 
+satellite_all_cvs: "{{ satellite_rhel7_base_cv + satellite_rhel7_capsule_cv }}"
 
-satellite_content_views:
-  - name: capsule-cv
+# Here we define particular composite content views. and enable them later
+# as with base Content Views. And as with base CVs, more can be configured outside this roles
 
-satellite_host_collections:
+satellite_rhel7_capsule_ccv:
+  - name: RHEL7 Satellite Capsule Composite Content View
+    components:
+      - content_view: RHEL7 Base CV
+        latest: true
+      - content_view: RHEL7 Capsule CV
+        latest: true
+
+satellite_all_ccvs: "{{ satellite_rhel7_capsule_ccv }}" 
+
+satellite_host_collection_from_roll:
   - name: capsule_hc
     description: "physical KVM servers"
 
-satellite_activation_keys:
+satellite_host_collections: "{{ satellite_host_collection_from_roll }}"
+
+satellite_activation_keys_from_role:
   - name: capsule-ak
     lifecycle_environment: "Library"
-    content_view: capsule-cv
+    content_view: RHEL7 Satellite Capsule Composite Content View
     host_collections:
       - capsule_hc
     subscriptions:
@@ -148,3 +223,5 @@ satellite_activation_keys:
     auto_attach: true
     release_version: 7Server
     service_level: "Premium"
+
+satellite_activation_keys: "{{ satellite_activation_keys_from_role }}"

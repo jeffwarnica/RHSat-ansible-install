@@ -18,7 +18,8 @@
 - name: Storage Config | Create the volume group.
   lvg:
     vg: "{{ satellite_vg_name }}"
-    pvs: "{{ satellite_data_disk }}"
+    pvs: 
+      - "{{ satellite_data_disk }}"
 
 - name: Storage Config | Create the logical volumes to be mounted to Satellite's required dirs
   lvol:
