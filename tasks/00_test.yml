@@ -1,0 +1,60 @@
+
+#Scratch file for fooling around with manipulating data from the role variables and inventory variables.
+
+- copy: 
+    content: "{{ satellite_all_cvs | to_json }}" 
+    dest: /tmp/foo.json
+  delegate_to: localhost
+
+# - copy: 
+#     content: "{{ satellite_all_products_combined | to_json }}" 
+#     dest: /tmp/foo_combined.json
+#   delegate_to: localhost  
+
+- name: dump satellite_all_cvs
+  debug:
+    msg: 
+      - "satellite_all_cvs is: [{{ satellite_all_cvs }}]"
+      
+- name: Loop over satellite_all_cvs and print stuff
+  debug:
+    msg: 
+      - "Content view name: [{{ item.name }}]"
+      - "Content view content: [{{ item.repos }}]"
+  with_items: "{{ satellite_all_cvs }}"
+
+- name: Print xtract product names in a loop
+  debug:
+    # msg: "xtracted product names: {{ satellite_all_cvs | json_query(_query) }}"
+    msg: "Product name: {{ item }} "
+  with_items: "{{ satellite_all_cvs | json_query(_query) }}"
+  vars:
+    _query: '[*].repos[*].product'
+  delegate_to: localhost
+
+- name: Print xtract repo names in a loop
+  debug:
+    # msg: "xtracted repo names: {{ satellite_all_cvs | json_query(_query) }}"
+    msg: "Repo name: {{ item }} "
+  with_items: "{{ satellite_all_cvs | json_query(_query) }}"
+  vars:
+    _query: '[*].repos[*].name'
+  delegate_to: localhost  
+
+- name: Print xtract repo details in a loop
+  debug:
+    # msg: "xtracted repo names: {{ satellite_all_cvs | json_query(_query) }}"
+    msg: "Repo name: {{ item.name }}, details: {{ item }} "
+  with_items: "{{ satellite_all_cvs | json_query(_query) }}"
+  vars:
+    _query: '[*].repos[*]'
+  delegate_to: localhost    
+
+- name: Print xtract CV details in a loop
+  debug:
+    # msg: "xtracted repo names: {{ satellite_all_cvs | json_query(_query) }}"
+    msg: "CV name: [{{ item.name }}], REPOS: [{{ item.repos }}], xtracted??: [{{ item.repos | json_query(_query) }}]"
+  with_items: "{{ satellite_all_cvs }}"
+  vars:
+    _query: "[*].{name: name, label: label}"
+  delegate_to: localhost      

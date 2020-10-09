@@ -1,0 +1,13 @@
+---
+
+- name: test certificate
+  shell: "katello-certs-check -c /tmp/backup/satellite-certificates/{{ inventory_hostname }}/{{ inventory_hostname }}_cert.pem -k /tmp/backup/satellite-certificates/{{ inventory_hostname }}/{{ inventory_hostname }}_cert_key.pem -b /tmp/backup/satellite-certificates/{{ inventory_hostname }}/{{ inventory_hostname }}_cert_bundle.pem"
+  args:
+    warn: no
+  register: katello_cert_check
+  check_mode: false
+  changed_when: false
+
+- name: print cert check
+  debug:
+    msg: "{{ katello_cert_check.stdout_lines }}"

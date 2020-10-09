@@ -1,0 +1,17 @@
+---
+- name: create satellite cret directory
+  file:
+    path: "/tmp/backup/satellite-certificates/{{ inventory_hostname }}"
+    state: directory
+
+- name: copy provided ssl files to sat server
+  copy:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+  with_items:
+    - src: "{{ satellite_certs_provided_cert }}"
+      dest: "/tmp/backup/satellite-certificates/{{ inventory_hostname }}/{{ inventory_hostname }}_cert.pem"
+    - src: "{{ satellite_certs_provided_key }}"
+      dest: "/tmp/backup/satellite-certificates/{{ inventory_hostname }}/{{ inventory_hostname }}_cert_key.pem"
+    - src: "{{ satellite_certs_provided_ca_bundle }}"
+      dest: "/tmp/backup/satellite-certificates/{{ inventory_hostname }}/{{ inventory_hostname }}_cert_bundle.pem"
